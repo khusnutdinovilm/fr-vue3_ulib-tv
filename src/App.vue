@@ -12,17 +12,9 @@
   <ui-notification />
 </template>
 
-<script>
+<script setup lang="ts">
 import AppHeader from "@/components/header.vue";
 import AppFooter from "@/components/footer.vue";
-
-export default {
-  components: {
-    AppHeader,
-    Notification,
-    AppFooter,
-  },
-};
 </script>
 
 <style>

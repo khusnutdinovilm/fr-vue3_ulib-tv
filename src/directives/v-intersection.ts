@@ -1,13 +1,13 @@
 export default {
   name: "intersection",
 
-  mounted(el, binding) {
+  mounted(el: any, binding: any) {
     const options = {
       rootMargin: "0px",
       threshold: 1.0,
     };
 
-    const callback = (entries) => {
+    const callback = (entries: any) => {
       if (entries[0].isIntersecting) {
         binding.value();
       }

@@ -7,48 +7,37 @@
 
       <ui-input v-model="post.body" placeholder="Введите описание поста" />
 
-      <ui-button class="post-form__button" :disabled="!isFormValid" @click="addPost">
+      <ui-button
+        class="post-form__button"
+        :disabled="!isFormValid"
+        @click="$emit('addNewPost', post)"
+      >
         Создать пост
       </ui-button>
     </div>
   </form>
 </template>
 
-<script>
-import { mapActions } from "vuex";
+<script setup lang="ts">
+import { NewPost } from "@/types/vars";
 
-export default {
-  data: () => ({
-    post: {
-      title: "",
-      body: "",
-    },
-  }),
+import { computed, ref } from "vue";
 
-  computed: {
-    isFormValid() {
-      const isPostTitleValid = this.post.title !== "";
+const post = ref<NewPost>({
+  title: "",
+  body: "",
+});
 
-      const isPostBodyValid = this.post.body !== "";
+defineEmits<{
+  (e: "addNewPost", post: NewPost): void;
+}>();
 
-      return isPostTitleValid && isPostBodyValid;
-    },
-  },
+const isFormValid = computed(() => {
+  const isPostTitleValid = post.value.title !== "";
+  const isPostBodyValid = post.value.body !== "";
 
-  methods: {
-    ...mapActions({
-      addPost: "posts/addPost",
-    }),
-    async addPost() {
-      const newPost = {
-        title: this.post.title,
-        body: this.post.body,
-      };
-
-      this.$emit("addNewPost", newPost);
-    },
-  },
-};
+  return isPostTitleValid && isPostBodyValid;
+});
 </script>
 
 <style scoped>

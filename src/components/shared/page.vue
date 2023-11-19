@@ -14,35 +14,26 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "shared-page",
-  props: {
-    loading: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    isEmpty: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    pageName: {
-      type: String,
-      required: true,
-    },
-  },
-  computed: {
-    classes() {
-      return {
-        loading: `${this.pageName}__loading`,
-        empty: `${this.pageName}__empty`,
-        content: `${this.pageName}__wrapper`,
-      };
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import { SharedPageProps } from "@/types/props";
+import { computed } from "vue";
+
+const { pageName } = withDefaults(defineProps<SharedPageProps>(), {
+  loading: false,
+  isEmpty: false,
+});
+
+const classes = computed(() => ({
+  loading: `${pageName}__loading`,
+  empty: `${pageName}__empty`,
+  content: `${pageName}__wrapper`,
+}));
 </script>
 
 <style scoped>

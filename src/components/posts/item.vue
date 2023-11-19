@@ -20,24 +20,20 @@
   </shared-card>
 </template>
 
-<script>
-export default {
-  components: {},
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { Post } from "@/types/vars";
 
-  emits: ["deletePost"],
+import { computed } from "vue";
 
-  computed: {
-    postBody() {
-      return this.post.body.slice(0, 75) + "...";
-    },
-  },
-};
+const { post } = defineProps<{
+  post: Post;
+}>();
+
+const emits = defineEmits<{
+  (e: "deletePost", postId: number): void;
+}>();
+
+const postBody = computed(() => post.body.slice(0, 75) + "...");
 </script>
 
 <style scoped>

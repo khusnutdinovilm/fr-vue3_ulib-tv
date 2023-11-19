@@ -1,3 +1,3 @@
 import UiSelect from "./select.vue";
 
-export default UiSelect
+export default UiSelect;

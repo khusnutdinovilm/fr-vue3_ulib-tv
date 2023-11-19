@@ -1,28 +1,26 @@
 <template>
-  <input
-    class="input"
-    :placeholder="placeholder"
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <input class="input" :placeholder="placeholder" :value="modelValue" @input="updateValue" />
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-input",
-  props: {
-    modelValue: {
-      type: [String, Number],
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: "Введите значение",
-    },
-  },
-  emits: ["update:modelValue"],
 };
+</script>
+
+<script setup lang="ts">
+import { InputProps } from "@/types/props";
+
+withDefaults(defineProps<InputProps>(), {
+  placeholder: "Введите значение",
+});
+
+const emits = defineEmits<{
+  (e: "update:modelValue", newValue: string): void;
+}>();
+
+const updateValue = (event: Event) =>
+  emits("update:modelValue", (event.target as HTMLInputElement).value);
 </script>
 
 <style scoped>

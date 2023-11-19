@@ -2,25 +2,23 @@
   <span class="notification-item" :class="classList"> {{ notification.body }}</span>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-notification-item",
-  props: {
-    notification: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  computed: {
-    classList() {
-      return {
-        "notification-item_error": this.notification.type === "error",
-        "notification-item_message": this.notification.type === "message",
-      };
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import { NotificationProps } from "@/types/props";
+
+import { computed } from "vue";
+
+const props = defineProps<NotificationProps>();
+
+const classList = computed(() => ({
+  "notification-item_error": props.notification.type === "error",
+  "notification-item_message": props.notification.type === "message",
+}));
 </script>
 
 <style>

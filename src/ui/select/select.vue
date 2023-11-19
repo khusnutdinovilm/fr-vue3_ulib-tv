@@ -1,35 +1,32 @@
 <template>
   <select v-model="selectedValue" class="p-1 px-2">
     <option disabled value="">Выберите значение</option>
-    <option v-for="option in options" :key="option" :value="option.value">
+    <option v-for="option in options" :key="option.value" :value="option.value">
       {{ option.title }}
     </option>
   </select>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-select",
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
-  },
-  emits: ["update:modelValue"],
-  data() {
-    return {
-      selectedValue: "",
-    };
-  },
-  watch: {
-    selectedValue(newValue) {
-      this.$emit("update:modelValue", newValue);
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import { SelectProps } from "@/types/props";
+
+import { ref, watch } from "vue";
+
+defineProps<SelectProps>();
+
+const emits = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
+const selectedValue = ref<string>("");
+
+watch(selectedValue, (newValue) => {
+  emits("update:modelValue", newValue);
+});
 </script>

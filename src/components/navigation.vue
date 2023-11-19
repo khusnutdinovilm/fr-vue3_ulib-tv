@@ -17,16 +17,15 @@
   </nav>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    navItems: [
-      { id: 0, title: "Главная", to: "/" },
-      { id: 1, title: "Посты", to: "/posts" },
-      // { id: 2, title: "Пользователи", to: "/users" },
-    ],
-  }),
-};
+<script setup lang="ts">
+import { NavItems } from "@/types/vars";
+
+import { ref } from "vue";
+
+const navItems = ref<NavItems[]>([
+  { id: 0, title: "Главная", to: "/" },
+  { id: 1, title: "Посты", to: "/posts" },
+]);
 </script>
 
 <style scoped>

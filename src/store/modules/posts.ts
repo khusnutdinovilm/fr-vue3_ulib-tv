@@ -11,22 +11,22 @@ export default {
     limit: 10,
   },
   getters: {
-    posts: (s) => s.posts,
-    page: (s) => s.page,
-    limit: (s) => s.limit,
+    posts: (s: any) => s.posts,
+    page: (s: any) => s.page,
+    limit: (s: any) => s.limit,
   },
   mutations: {
-    setPosts: (s, posts) => (s.posts = posts),
-    pushNewPosts: (s, newPosts) => (s.posts = [...s.posts, ...newPosts]),
-    addPost: (s, newPost) => (s.posts = [newPost, ...s.posts]),
-    deletePost: (s, id) => {
-      let idx = s.posts.findIndex((post) => post.id === id);
+    setPosts: (s: any, posts: any) => (s.posts = posts),
+    pushNewPosts: (s: any, newPosts: any) => (s.posts = [...s.posts, ...newPosts]),
+    addPost: (s: any, newPost: any) => (s.posts = [newPost, ...s.posts]),
+    deletePost: (s: any, id: number) => {
+      let idx = s.posts.findIndex((post: any) => post.id === id);
       s.posts.splice(idx, 1);
     },
-    updatePage: (s) => s.page++,
+    updatePage: (s: any) => s.page++,
   },
   actions: {
-    async fetchPosts({ getters, commit }, page) {
+    async fetchPosts({ getters, commit, dispatch }: any) {
       try {
         if (!getters.posts.length) {
           const { data: posts } = await axios.get(url, {
@@ -45,7 +45,7 @@ export default {
       }
     },
 
-    async fetchMorePosts({ getters, commit }) {
+    async fetchMorePosts({ getters, commit, dispatch }: any) {
       try {
         commit("updatePage");
 
@@ -64,7 +64,7 @@ export default {
       }
     },
 
-    async fetchPostById({ dispatch }, id) {
+    async fetchPostById({ dispatch }: any, id: number) {
       try {
         const { data: post } = await axios.get(`${url}/${id}`);
 
@@ -72,9 +72,7 @@ export default {
 
         post.body = post.body
           .split("\n")
-          .map((paragraph) => {
-            return `${paragraph} `.repeat(50);
-          })
+          .map((paragraph: any) => `${paragraph} `.repeat(50))
           .join("\n");
 
         return {
@@ -93,7 +91,7 @@ export default {
       }
     },
 
-    async addPost({ commit, dispatch }, newPost) {
+    async addPost({ commit, dispatch }: any, newPost: any) {
       try {
         const response = await axios.post(url, newPost);
 
@@ -107,7 +105,7 @@ export default {
       }
     },
 
-    async deletePostById({ commit, dispatch }, id) {
+    async deletePostById({ commit, dispatch }: any, id: any) {
       try {
         await axios.delete(`${url}/${id}`);
 

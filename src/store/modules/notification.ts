@@ -2,19 +2,14 @@ export default {
   namespaced: true,
   state: {
     notifications: [],
-    notification: {
-      error: "",
-      message: "",
-    },
-    errorMap: {},
   },
   getters: {
-    notifications: (s) => s.notifications,
-    error: (s) => s.notification.error,
-    message: (s) => s.notification.message,
+    notifications: (s: any) => s.notifications,
+    error: (s: any) => s.notification.error,
+    message: (s: any) => s.notification.message,
   },
   mutations: {
-    setMessage(s, notificationText) {
+    setMessage(s: any, notificationText: any) {
       s.notifications.push({
         id: Date.now(),
         type: "message",
@@ -22,7 +17,7 @@ export default {
       });
     },
 
-    setError(s, notificationText) {
+    setError(s: any, notificationText: any) {
       s.notifications.push({
         id: Date.now(),
         type: "error",
@@ -30,16 +25,16 @@ export default {
       });
     },
 
-    clearNotification(s) {
+    clearNotification(s: any) {
       s.notifications.splice(0, 1);
     },
   },
   actions: {
-    setMessage({ commit }, message) {
+    setMessage({ commit }: any, message: any) {
       commit("setMessage", message);
       setTimeout(() => commit("clearNotification"), 3000);
     },
-    setError({ commit }, error) {
+    setError({ commit }: any, error: any) {
       commit("setError", error);
       setTimeout(() => commit("clearNotification"), 3000);
     },

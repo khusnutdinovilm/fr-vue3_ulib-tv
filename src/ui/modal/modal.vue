@@ -8,21 +8,21 @@
   </Teleport>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-modal",
-  props: {
-    showModal: {
-      type: Boolean,
-    },
-  },
-  emits: ["update:showModal"],
-  methods: {
-    closeModal() {
-      this.$emit("update:showModal", false);
-    },
-  },
 };
+</script>
+<script setup lang="ts">
+import { ModalProps } from "@/types/props";
+
+defineProps<ModalProps>();
+
+const emits = defineEmits<{
+  (e: "update:showModal", value: boolean): void;
+}>();
+
+const closeModal = () => emits("update:showModal", false);
 </script>
 
 <style>

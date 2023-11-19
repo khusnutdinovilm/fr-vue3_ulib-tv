@@ -7,13 +7,13 @@ export default {
     user: null,
   },
   getters: {
-    user: (s) => s.user,
+    user: (s: any) => s.user,
   },
   mutations: {
-    setUser: (s, user) => (s.user = user),
+    setUser: (s: any, user: any) => (s.user = user),
   },
   actions: {
-    async fetchUserById({ commit }, id) {
+    async fetchUserById({}, id: any) {
       const { data: user } = await axios.get(`${url}/${id}`);
       return user;
     },

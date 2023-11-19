@@ -4,7 +4,7 @@
       <router-link to="/posts"> Вернуться на страницу с постами </router-link>
 
       <h1 class="post__title">
-        {{ post.title }}
+        {{ post?.title }}
       </h1>
 
       <div class="post__content">
@@ -15,36 +15,32 @@
     </template>
 
     <template #empty-content>
-      <h1 class="post__title">Не удалось загрузить посты.</h1>
+      <h1 class="post__title">Не удалось загрузить пост.</h1>
       <ui-button @click="$router.push('/posts')"> Вернуться к списку постов </ui-button>
     </template>
   </shared-page>
 </template>
 
-<script>
-import { mapActions } from "vuex";
-export default {
-  data: () => ({
-    post: null,
-    loading: true,
-  }),
-  computed: {
-    postBody() {
-      return this.post.body.split("\n");
-    },
-  },
-  methods: {
-    ...mapActions({
-      fetchPostById: "posts/fetchPostById",
-      fetchUserById: "users/fetchUserById",
-    }),
-  },
-  async mounted() {
-    this.post = await this.fetchPostById(this.$route.params.id);
+<script setup lang="ts">
+import { PostPage } from "@/types/vars";
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
 
-    this.loading = false;
-  },
-};
+const { id } = defineProps<{
+  id: string;
+}>();
+
+const store = useStore();
+
+const post = ref<PostPage | null>(null);
+const loading = ref<boolean>(true);
+
+const postBody = computed(() => post.value?.body.split("\n"));
+
+onMounted(async () => {
+  post.value = await store.dispatch("posts/fetchPostById", id, { root: true });
+  loading.value = false;
+});
 </script>
 
 <style>

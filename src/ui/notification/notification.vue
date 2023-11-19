@@ -12,29 +12,22 @@
   </teleport>
 </template>
 
-<script>
-import { mapGetters } from "vuex";
-import NotificationItem from "./notification-item.vue";
-
+<script lang="ts">
 export default {
   name: "ui-notification",
-  components: { NotificationItem },
-  computed: {
-    ...mapGetters({
-      notifications: "notification/notifications",
-      error: "notification/error",
-      message: "notification/message",
-    }),
-
-    showNotification() {
-      return this.notifications.length;
-    },
-
-    notificationMsg() {
-      return this.error ? this.error : this.message;
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import NotificationItem from "./notification-item.vue";
+
+import { useStore } from "vuex";
+import { computed } from "vue";
+
+const store = useStore();
+
+const notifications = computed(() => store.getters["notification/notifications"]);
+const showNotification = computed(() => notifications.value.length);
 </script>
 
 <style>

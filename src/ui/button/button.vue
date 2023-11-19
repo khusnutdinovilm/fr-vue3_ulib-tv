@@ -1,34 +1,31 @@
 <template>
-  <button class="btn" :class="classList" :disabled="disabled">
+  <button class="btn" :class="classList" :disabled="isDisabled">
     <slot />
   </button>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-button",
-  props: {
-    status: {
-      type: String,
-      required: false,
-      default: "primary",
-      validate: (value) => ["primary", "danger"].includes(value),
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    classList() {
-      const classList = {
-        "btn-primary": this.status === "primary" && !this.disabled,
-        "btn-danger": this.status === "danger" && !this.disabled,
-      };
-      return classList;
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import { ButtonProps } from "@/types/props";
+
+import { computed } from "vue";
+
+const { status, isDisabled } = withDefaults(defineProps<ButtonProps>(), {
+  status: () => "primary",
+});
+
+const classList = computed(() => {
+  return {
+    "btn-primary": status === "primary" && !isDisabled,
+    "btn-danger": status === "danger" && !isDisabled,
+    daneger: true,
+  };
+});
 </script>
 
 <style scoped>

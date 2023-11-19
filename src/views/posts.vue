@@ -37,66 +37,55 @@
   </ui-modal>
 </template>
 
-<script>
-import { mapGetters, mapActions } from "vuex";
+<script setup lang="ts">
+import { Post, NewPost, SelectOptions } from "@/types/vars";
 
 import PostsForm from "@/components/posts/add-form.vue";
 import PostsItem from "@/components/posts/item.vue";
 
-export default {
-  name: "posts-page",
-  components: { PostsForm, PostsItem },
-  data: () => ({
-    loading: true,
-    showModal: false,
-    searchQuery: "",
-    selectedSort: "",
-    sortOptions: [
-      { value: "title", title: "По названию" },
-      { value: "body", title: "По содержимому" },
-    ],
-  }),
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
 
-  computed: {
-    ...mapGetters({
-      posts: "posts/posts",
-    }),
+const store = useStore();
 
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) =>
-        post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
-      );
-    },
+const posts = computed(() => store.getters["posts/posts"]);
 
-    filterdAndSearchedPosts() {
-      return this.sortedPosts.filter((post) => post.title.toLowerCase().includes(this.searchQuery));
-    },
-  },
+const loading = ref<boolean>(true);
+const showModal = ref<boolean>(false);
+const searchQuery = ref<string>("");
+const selectedSort = ref<string>("");
+const sortOptions = ref<SelectOptions[]>([
+  { value: "title", title: "По названию" },
+  { value: "body", title: "По содержимому" },
+]);
 
-  async mounted() {
-    await this.fetchPosts();
-    this.loading = false;
-  },
+onMounted(async () => {
+  await store.dispatch("posts/fetchPosts");
+  loading.value = false;
+});
 
-  methods: {
-    ...mapActions({
-      fetchPosts: "posts/fetchPosts",
-      fetchMorePosts: "posts/fetchMorePosts",
-      deletePost: "posts/deletePostById",
-      addPost: "posts/addPost",
-    }),
-
-    addNewPost(newPost) {
-      this.addPost(newPost).then(() => (this.showModal = false));
-    },
-
-    async loadMorePosts() {
-      this.loading = true;
-      await this.fetchMorePosts();
-      this.loading = false;
-    },
-  },
+const fetchMorePosts = async () => {
+  await store.dispatch("posts/fetchMorePosts");
 };
+
+const addNewPost = async (newPost: NewPost) => {
+  await store.dispatch("posts/addPost", newPost);
+  showModal.value = false;
+};
+
+const deletePost = async (postId: number) => {
+  await store.dispatch("posts/deletePostById", postId);
+};
+
+const sortedPosts = computed(() =>
+  [...posts.value].sort((post1, post2) =>
+    post1[selectedSort.value]?.localeCompare(post2[selectedSort.value])
+  )
+);
+
+const filterdAndSearchedPosts = computed(() =>
+  sortedPosts.value.filter((post: Post) => post.title.toLowerCase().includes(searchQuery.value))
+);
 </script>
 
 <style>

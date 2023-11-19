@@ -1,34 +1,29 @@
 <template>
-  <!-- <div class="loader"> -->
-  <span class="loader__spiner" :style="spinerStyle"></span>
-  <!-- </div> -->
+  <div class="loader">
+    <span class="loader__spiner" :style="spinerStyle"></span>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "ui-loader",
-  props: {
-    size: {
-      type: Number,
-      required: false,
-    },
-    borderWidth: {
-      type: Number,
-      required: false,
-      default: 1,
-    },
-  },
-
-  computed: {
-    spinerStyle() {
-      return {
-        borderWidth: `${this.borderWidth}px`,
-        width: this.size ? `${this.size}px` : "inherit",
-        height: this.size ? `${this.size}px` : "inherit",
-      };
-    },
-  },
 };
+</script>
+
+<script setup lang="ts">
+import { LoaderProps } from "@/types/props";
+
+import { computed } from "vue";
+
+const { size, borderWidth } = withDefaults(defineProps<LoaderProps>(), {
+  borderWidth: 1,
+});
+
+const spinerStyle = computed(() => ({
+  borderWidth: `${borderWidth}px`,
+  width: size ? `${size}px` : "inherit",
+  height: size ? `${size}px` : "inherit",
+}));
 </script>
 
 <style>
